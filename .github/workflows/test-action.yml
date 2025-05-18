@@ -1,12 +1,36 @@
-﻿name: Test
+﻿name: Test Action
 
 on:
   workflow_dispatch:
     inputs:
-      target:
-        description: Target
+      owner:
+        description: 'Owner'
         type: string
-        default: E4-Actions
+        required: false
+      repository:
+        description: 'Repository'
+        type: string
+        required: false
+      commitish:
+        description: 'Commitish'
+        type: string
+        required: true
+        default: 'master'
+      tag_name:
+        description: 'Tag Name'
+        type: string
+        required: true
+        default: 'v0.1.0'
+      prerelease:
+        description: 'PreRelease'
+        type: boolean
+        required: false
+        default: false
+      generate_release_notes:
+        description: 'Generate Release Notes'
+        type: boolean
+        required: false
+        default: true
 
 jobs:
   test-job:
@@ -14,6 +38,12 @@ jobs:
 
     steps:
       - name: Test step
-        uses: E4-Actions/template-action@master
+        uses: E4-Actions/create-release@develop
         with:
-          target: ${{ inputs.target }}
+          github_token: ${{ secrets.PAT_ALL_REPOSITORIES_CONTENTS }}
+          owner: ${{ inputs.owner }}
+          repository: ${{ inputs.repository }}
+          commitish: ${{ inputs.commitish }}
+          tag_name: ${{ inputs.tag_name }}
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: ${{ inputs.generate_release_notes }}

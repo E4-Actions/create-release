@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Test step
-        uses: E4-Actions/create-release@develop
+        uses: E4-Actions/create-release@feature/update-release
         with:
           github_token: ${{ secrets.PAT_ALL_REPOSITORIES_CONTENTS }}
           owner: ${{ inputs.owner }}

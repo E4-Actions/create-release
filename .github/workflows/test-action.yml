@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: 'Create release'
-        uses: E4-Actions/create-release@feature/update-release
+        uses: E4-Actions/create-release@develop
         with:
           github_token: ${{ secrets.PAT_ALL_REPOSITORIES_CONTENTS }}
           owner: ${{ inputs.owner }}

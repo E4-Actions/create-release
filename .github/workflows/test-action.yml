@@ -33,11 +33,11 @@ on:
         default: true
 
 jobs:
-  test-job:
+  create-release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test step
+      - name: 'Create release'
         uses: E4-Actions/create-release@feature/update-release
         with:
           github_token: ${{ secrets.PAT_ALL_REPOSITORIES_CONTENTS }}

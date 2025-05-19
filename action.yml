@@ -67,7 +67,7 @@ runs:
     - name: 'Create release'
       run: |
         if [ -n "${{ env.RELEASE_ID }}" ]; then
-          echo "Release for ${{ inputs.tag_name }} is already exist"
+          echo "Release for ${{ inputs.tag_name }} is already exist."
           exit 0
         fi
 
@@ -82,7 +82,10 @@ runs:
 
         STATUS=$(echo $RESPONSE | jq '.status')
         if [ "$STATUS" != null ]; then
+          echo "Failed to create release for ${{ inputs.tag_name }}."
           echo "HTTP status code: $STATUS"
           exit 1
+        else
+          echo "Succeed to create release for ${{ inputs.tag_name }}."
         fi
       shell: bash

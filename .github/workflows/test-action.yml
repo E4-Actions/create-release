@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: 'Create release'
-        uses: E4-Actions/create-release@develop
+        uses: E4-Actions/create-release@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           owner: ${{ inputs.owner }}

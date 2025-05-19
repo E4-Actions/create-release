@@ -35,12 +35,14 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: 'Create release'
         uses: E4-Actions/create-release@develop
         with:
-          github_token: ${{ secrets.PAT_ALL_REPOSITORIES_CONTENTS }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           owner: ${{ inputs.owner }}
           repository: ${{ inputs.repository }}
           commitish: ${{ inputs.commitish }}

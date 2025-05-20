@@ -10,7 +10,7 @@ inputs:
     description: 'Repository on which to release. Used only if you want to create the release on another repo'
     required: false
   commitish:
-    description: 'Any branch or commit SHA the Git tag is created from, unused if the Git tag already exists. Default: SHA of current commit'
+    description: 'Any branch or commit SHA the Git tag is created from, unused if the Git tag already exists.'
     required: true
   tag_name:
     description: 'The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag'
@@ -19,13 +19,20 @@ inputs:
     description: 'Text describing the contents of the tag.'
     required: false
   prerelease:
-    description: '`true` to identify the release as a prerelease. `false` to identify the release as a full release. Default: `false`'
+    description: '`true` to identify the release as a prerelease. `false` to identify the release as a full release.'
     required: false
     default: false
   generate_release_notes:
     description: 'Whether to automatically generate the name and body for this release.'
     required: false
     default: true
+outputs:
+  release-id:
+    description: 'Release ID'
+    value: ${{ steps.create-release.outputs.release-id }}
+  created:
+    description: 'Created'
+    value: ${{ steps.create-release.outputs.created }}
 runs:
   using: composite
   steps:
@@ -52,7 +59,6 @@ runs:
         echo "GENERATE_RELEASE_NOTES=$GENERATE_RELEASE_NOTES" >> "$GITHUB_ENV"
       shell: bash
     - name: 'Get release id'
-      id: get-release-id
       run: |
         RESPONSE=$(curl -L \
           -H "Accept: application/vnd.github+json" \
@@ -65,9 +71,13 @@ runs:
         echo "RELEASE_ID=$RELEASE_ID" >> "$GITHUB_ENV"
       shell: bash
     - name: 'Create release'
+      id: create-release
       run: |
         if [ -n "${{ env.RELEASE_ID }}" ]; then
           echo "Release for ${{ inputs.tag_name }} is already exist."
+
+          echo "release-id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+          echo "created=false" >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
@@ -88,4 +98,9 @@ runs:
         else
           echo "Succeed to create release for ${{ inputs.tag_name }}."
         fi
+
+        RELEASE_ID=$(echo "$RESPONSE" | jq '.id')
+
+        echo "release-id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+        echo "created=true" >> "$GITHUB_OUTPUT"
       shell: bash

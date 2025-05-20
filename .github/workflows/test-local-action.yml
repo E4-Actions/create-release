@@ -39,7 +39,10 @@ jobs:
       contents: write
 
     steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
       - name: 'Test local action'
+        id: test-local-action
         uses: ./
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,3 +52,7 @@ jobs:
           tag_name: ${{ inputs.tag_name }}
           prerelease: ${{ inputs.prerelease }}
           generate_release_notes: ${{ inputs.generate_release_notes }}
+      - name: 'Print outputs'
+        run: |
+          echo "created: ${{ steps.test-local-action.outputs.created }}"
+          echo "release-id: ${{ steps.test-local-action.outputs.release-id }}"

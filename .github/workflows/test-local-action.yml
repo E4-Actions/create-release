@@ -1,4 +1,4 @@
-﻿name: Test Action
+﻿name: 'Test Local Action'
 
 on:
   workflow_dispatch:
@@ -33,14 +33,14 @@ on:
         default: true
 
 jobs:
-  create-release:
+  test-local-action:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: 'Create release'
-        uses: E4-Actions/create-release@v1
+      - name: 'Test local action'
+        uses: ./
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           owner: ${{ inputs.owner }}

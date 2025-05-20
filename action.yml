@@ -26,6 +26,13 @@ inputs:
     description: 'Whether to automatically generate the name and body for this release.'
     required: false
     default: true
+outputs:
+  release-id:
+    description: 'Release ID'
+    value: ${{ steps.create-release.outputs.release-id }}
+  created:
+    description: 'Created'
+    value: ${{ steps.create-release.outputs.created }}
 runs:
   using: composite
   steps:
@@ -64,9 +71,13 @@ runs:
         echo "RELEASE_ID=$RELEASE_ID" >> "$GITHUB_ENV"
       shell: bash
     - name: 'Create release'
+      id: create-release
       run: |
         if [ -n "${{ env.RELEASE_ID }}" ]; then
           echo "Release for ${{ inputs.tag_name }} is already exist."
+
+          echo "release-id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+          echo "created=false" >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
@@ -87,4 +98,9 @@ runs:
         else
           echo "Succeed to create release for ${{ inputs.tag_name }}."
         fi
+
+        RELEASE_ID=$(echo "$RESPONSE" | jq '.id')
+
+        echo "release-id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+        echo "created=true" >> "$GITHUB_OUTPUT"
       shell: bash

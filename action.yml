@@ -52,7 +52,6 @@ runs:
         echo "GENERATE_RELEASE_NOTES=$GENERATE_RELEASE_NOTES" >> "$GITHUB_ENV"
       shell: bash
     - name: 'Get release id'
-      id: get-release-id
       run: |
         RESPONSE=$(curl -L \
           -H "Accept: application/vnd.github+json" \

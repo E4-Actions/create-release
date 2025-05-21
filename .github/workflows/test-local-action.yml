@@ -45,7 +45,6 @@ jobs:
         id: test-local-action
         uses: ./
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           owner: ${{ inputs.owner }}
           repository: ${{ inputs.repository }}
           commitish: ${{ inputs.commitish }}
